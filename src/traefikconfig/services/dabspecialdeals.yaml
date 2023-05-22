@@ -1,0 +1,24 @@
+http:
+  services:
+    dab-specialdeals-svc:
+      loadBalancer:
+        passHostHeader: false
+        servers:
+          - url: 'https://traefikaca-app.internal.{{ env "CONTAINER_APP_ENV_DNS_SUFFIX" }}'
+  middlewares:
+    specialdeals-rewrite:
+      replacePathRegex:
+        regex: "^/specialdeals(/|$)(.*)"
+        replacement: "/api/SpecialDeals/$2"
+    specialdeals-ratelimit:
+      rateLimit:
+        average: 50
+        period: 1m
+        burst: 10
+  routers:
+    specialdeals-rtr:
+      rule: "Path(`/specialdeals`)"
+      middlewares:
+        - "specialdeals-rewrite"
+        - "specialdeals-ratelimit"
+      service: dab-specialdeals-svc

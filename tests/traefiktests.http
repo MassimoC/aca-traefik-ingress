@@ -1,0 +1,23 @@
+### RESTclient
+
+# ************************
+# * Internal
+# ************************
+
+### GET 403 Forbidden
+GET https://traefikaca-app.internal.livelybay-464f1cbd.westeurope.azurecontainerapps.io/api/Specialdeals
+
+
+# ************************
+# * Traefik
+# ************************
+
+### GET
+GET https://traefikaca-ing.livelybay-464f1cbd.westeurope.azurecontainerapps.io/specialdeals
+
+
+
+# ************************
+# * Throttling
+# ************************
+for i in {1..200};do curl -s -o /dev/null  -w "HTTP %{http_code}" https://traefikaca-ing.livelybay-464f1cbd.westeurope.azurecontainerapps.io/specialdeals; echo; done
